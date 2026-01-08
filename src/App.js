@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Tesseract from 'tesseract.js';
 import './App.css'; 
 
-// 기준 해상도: 1366 x 768 
+// Reso: 1366 x 768 
 const ROI_PCT = {
   DICE: { x: 380/1366, y: 300/768, w: 600/1366, h: 200/768 },
   ATTR: { x: 300/1366, y: 480/768, w: 730/1366, h: 180/768 },
@@ -16,7 +16,7 @@ const PATTERNS = {
   multiplier: /Final\s*[^0-9+-]*\+?\s*([\d\s.]+)/i
 };
 
-// 색상 기반 등급 판정
+// Color ranking
 const RANK_COLORS = {
   'Common': { r: 120, g: 120, b: 110 },   // Gray
   'Rare': { r: 80, g: 150, b: 155 },     // Blue
@@ -259,14 +259,14 @@ const App = () => {
     let roi = null;
     let srcRGB = null;
     try {
-        // 중앙 부분 50%만 샘플링하여 속도 최적화
+        // Math formulas
         const scale = 0.5; 
         const newW = Math.floor(rect.w * scale);
         const newH = Math.floor(rect.h * scale);
         const newX = Math.floor(rect.x + (rect.w - newW) / 2);
         const newY = Math.floor(rect.y + (rect.h - newH) / 2);
 
-        // 이미지 범위 체크
+        // Comparison
         const finalX = Math.max(0, newX);
         const finalY = Math.max(0, newY);
         const finalW = Math.min(newW, srcMat.cols - finalX);
@@ -287,7 +287,7 @@ const App = () => {
         let closestRank = 'Common';
 
         for (const [rank, color] of Object.entries(RANK_COLORS)) {
-            // 유클리드 거리로 색상 차이 계산
+            // Scaling
             const dist = Math.sqrt(
                 Math.pow(r - color.r, 2) + 
                 Math.pow(g - color.g, 2) + 
@@ -466,18 +466,18 @@ const App = () => {
         let detectedSites = applyNMS(siteCandidates, 0.4); 
 
         // [Color Override Logic]
-        // 템플릿 매칭은 모양(S_x 등)만 신뢰하고, 등급(Rare 등)은 색상 분석으로 결정
+        // Color Analysis
         const finalSites = detectedSites.map(site => {
             const { rank, r, g, b } = getRankFromROI(cv, src, site);
             
-            // 기존 ID (예: S_x_Rare)에서 앞부분 (S_x)만 추출
+            // First extraction
             const parts = site.id.split('_');
             if (parts.length >= 3) {
-                parts.pop(); // 기존 rank 제거
-                parts.push(rank); // 색상 분석된 rank 추가
+                parts.pop(); // Reset
+                parts.push(rank); // Replace
                 const newId = parts.join('_');
                 
-                // 만약 조합된 새 ID가 유효한 이미지 목록에 있다면 교체
+                // Replacing if exist
                 if (SITE_IMAGES[newId] || SITE_IMAGES[newId.replace('dice/', '')]) {
                     return { ...site, id: newId, r, g, b }; 
                 }
@@ -692,13 +692,13 @@ const App = () => {
         let dsize = new cv.Size(region.w * scale, region.h * scale);
         cv.resize(roi, enlarged, dsize, 0, 0, cv.INTER_CUBIC);
         
-        // 그레이스케일 변환
+        // Grayscale
         cv.cvtColor(enlarged, enlarged, cv.COLOR_RGBA2GRAY, 0);
 
-        // 이진화 (Otsu): 밝은 글자(흰색)를 255로, 어두운 배경을 0으로 분리
+        // Set border
         cv.threshold(enlarged, enlarged, 0, 255, cv.THRESH_BINARY | cv.THRESH_OTSU);
 
-        // 색상 반전: 검은 글자/흰 배경으로 변환
+        // Enlarge
         cv.bitwise_not(enlarged, enlarged);
 
         const tempCanvas = document.createElement('canvas');
@@ -732,9 +732,9 @@ const App = () => {
 
             let conditionText = trimmed.substring(0, effectIndex).replace(/[:;.,-]$/, "").trim();
             
-            // Dice Total: 공백 제거 없이 parseInt로 앞부분 숫자만 취함 (+9 7 -> 9)
+            // Dice Total parseInt
             const totalStr = totalMatch ? totalMatch[1] : "0";
-            // Multiplier: 소수점 사이 공백 대응을 위해 공백 제거 유지 (1. 2 -> 1.2)
+            // Multiplier: remove decimal point
             const multiStr = multiMatch ? multiMatch[1].replace(/\s+/g, '') : "0";
 
             parsedEffects.push({
