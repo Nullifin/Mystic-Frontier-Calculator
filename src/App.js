@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Tesseract from 'tesseract.js';
 import './App.css'; 
 
-// Resolution: 1366 x 768 
+// 기준 해상도: 1366 x 768 
 const ROI_PCT = {
   DICE: { x: 380/1366, y: 300/768, w: 600/1366, h: 200/768 },
   ATTR: { x: 300/1366, y: 480/768, w: 730/1366, h: 180/768 },
@@ -16,7 +16,7 @@ const PATTERNS = {
   multiplier: /Final\s*[^0-9+-]*\+?\s*([\d\s.]+)/i
 };
 
-// Colors
+// 색상 기반 등급 판정
 const RANK_COLORS = {
   'Common': { r: 120, g: 120, b: 110 },   // Gray
   'Rare': { r: 80, g: 150, b: 155 },     // Blue
@@ -776,7 +776,7 @@ const App = () => {
   return (
     <div className="app-container">
       <header className="header">
-        <h2 className="title">Mystic Frontier Calculator (Beta)</h2>
+        <h2 className="title"> Nulifin Mystic Frontier Calculator </h2>
         <div className="header-actions">
           <label className="debug-toggle">
             <input 
@@ -786,7 +786,6 @@ const App = () => {
             />
             Show Debug
           </label>
-          </a>
           <button 
             className="btn-capture" 
             onClick={startScreenCapture} 
