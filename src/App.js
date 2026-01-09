@@ -630,6 +630,19 @@ const App = () => {
           }
         }
         return true;
+
+        //F. Are each Logic
+        if (text.includes("are each") {
+
+          if (targetIndices.length === 0) targetIndices = [0, 1, 2];
+
+          const sumMatch = text.match (/are each\s*(\d+)/);
+          const targetVal = sumMatch ? parseInt(sumMatch[1]) : 0;
+
+          if (!targetIndices.every(hasDie)) return false;
+          return targetIndices.every(idx => getVal(idx) >= targetVal);
+        }
+          
       };
 
       let totalBonus = 0;
