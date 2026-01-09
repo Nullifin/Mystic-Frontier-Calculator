@@ -634,7 +634,7 @@ const App = () => {
          if (text.includes("add up to") || text.includes("are each")) {
             if (targetIndices.length === 0) targetIndices = [0, 1, 2]; // fallback
 
-            const sumMatch = text.match ((/(?:add up to|are each)\s*(\d+)/i););
+            const sumMatch = text.match ((/(add up to|are each)\s*(\d+)/););
             const targetVal = sumMatch ? parseInt(sumMatch[1]) : 0;
 
             if (!targetIndices.every(hasDie)) return false;
