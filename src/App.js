@@ -632,7 +632,7 @@ const App = () => {
         return true;
 
         // F. Are each Logic
-        if (text.includes("are each") {
+        if (text.includes("are each")) {
           if (targetIndices.length === 0) targetIndices = [0, 1, 2];
 
           const sumMatch = text.match (/are each\s*(\d+)/);
