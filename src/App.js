@@ -629,17 +629,10 @@ const App = () => {
               });
           }
         }
-        return true;
-
+        
         // F. Are each Logic
         if (text.includes("are each")) {
-            let targetIndices = [];
-
-          // Detect which dice the text is referring to
-            if (text.includes("first and second")) targetIndices = [0, 1];
-            else if (text.includes("first and third")) targetIndices = [0, 2];
-            else if (text.includes("second and third")) targetIndices = [1, 2];
-            else if (targetIndices.length === 0) targetIndices = [0, 1, 2]; // fallback
+            if (targetIndices.length === 0) targetIndices = [0, 1, 2]; // fallback
 
             const sumMatch = text.match (/are each\s*(\d+)/);
             const targetVal = sumMatch ? parseInt(sumMatch[1]) : 0;
@@ -647,7 +640,7 @@ const App = () => {
             if (!targetIndices.every(hasDie)) return false;
             return targetIndices.every(idx => getVal(idx) >= targetVal);
         }
-          
+         return true;
       };
 
       let totalBonus = 0;
