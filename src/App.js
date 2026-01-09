@@ -585,7 +585,7 @@ const App = () => {
             }
         }
 
-        // C. Add Up To Logic (Each die >= X)
+        /* C. Add Up To Logic (Each die >= X)
         if (text.includes("add up to")) {
           // Implicit "all" if not specified, though usually "all three" is caught above
           if (targetIndices.length === 0) targetIndices = [0, 1, 2]; 
@@ -595,7 +595,7 @@ const App = () => {
           
           if (!targetIndices.every(hasDie)) return false;
           return targetIndices.every(idx => getVal(idx) >= targetVal);
-        }
+        } */
 
         // D. Consecutive Logic
         if (text.includes("consecutive")) {
@@ -630,11 +630,11 @@ const App = () => {
           }
         }
         
-        // F. Are each Logic
-        if (text.includes("are each")) {
+        // F. Are each / add up to Logic
+         if (text.includes("add up to") || text.includes("are each")) {
             if (targetIndices.length === 0) targetIndices = [0, 1, 2]; // fallback
 
-            const sumMatch = text.match (/are each\s*(\d+)/);
+            const sumMatch = text.match ((/(?:add up to|are each)\s*(\d+)/i););
             const targetVal = sumMatch ? parseInt(sumMatch[1]) : 0;
 
             if (!targetIndices.every(hasDie)) return false;
